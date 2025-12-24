@@ -1,33 +1,28 @@
-import { createInterface } from "node:readline";
-import { getCommands } from "./cliCommand.js";
 export function cleanInput(input) {
     const lowerCaseInput = input.toLocaleLowerCase().trim();
     return lowerCaseInput.split(" ");
 }
-export function startREPL() {
-    const rl = createInterface({
-        input: process.stdin,
-        output: process.stdout,
-        prompt: "Pokedex > "
-    });
+export function startREPL(state) {
+    const rl = state.interface;
+    const registry = state.commands;
     rl.prompt();
     rl.on("line", (input) => {
         if (!input.length) {
             rl.prompt();
+            return;
         }
         else {
-            const firstWord = cleanInput(input)[0];
-            const registry = getCommands();
-            if (firstWord in registry) {
+            const command = cleanInput(input)[0];
+            if (command in registry) {
                 try {
-                    registry[firstWord].callback(registry);
+                    registry[command].callback(state);
                 }
                 catch (err) {
                     console.log(err);
                 }
             }
             else {
-                throw new Error("Unknown command");
+                throw new Error("Unknown command. Type 'help' to display commands.");
             }
             rl.prompt();
         }

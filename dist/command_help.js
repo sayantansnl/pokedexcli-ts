@@ -1,11 +1,9 @@
-import { getCommands } from "./cliCommand.js";
-export function commandHelp() {
+export function commandHelp(state) {
     console.log("Welcome to the Pokedex!");
     console.log("Usage:");
-    console.log("\n");
-    const registry = getCommands();
-    for (const key in registry) {
-        const description = registry[key].description;
-        console.log(`${key}: ${description}`);
+    console.log();
+    for (const command in state.commands) {
+        const description = state.commands[command].description;
+        console.log(`${command}: ${description}`);
     }
 }

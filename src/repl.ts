@@ -1,17 +1,13 @@
-import { createInterface } from "node:readline";
-import { getCommands } from "./cliCommand.js";
+import { State } from "./state.js";
 
 export function cleanInput(input: string): string[] {
     const lowerCaseInput = input.toLocaleLowerCase().trim();
     return lowerCaseInput.split(" ");
 }
 
-export function startREPL() {
-    const rl = createInterface({
-        input: process.stdin,
-        output: process.stdout,
-        prompt: "Pokedex > "
-    });
+export function startREPL(state: State) {
+    const rl = state.interface;
+    const registry = state.commands;
 
     rl.prompt();
     rl.on("line", (input) => {
@@ -20,11 +16,10 @@ export function startREPL() {
             return;
         } else {
             const command = cleanInput(input)[0];
-            const registry = getCommands();
 
             if (command in registry) {
                 try {
-                    registry[command].callback(registry);
+                    registry[command].callback(state);
                 } catch (err) {
                     console.log(err);
                 }
