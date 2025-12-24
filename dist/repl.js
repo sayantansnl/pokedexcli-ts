@@ -1,4 +1,5 @@
 import { createInterface } from "node:readline";
+import { getCommands } from "./cliCommand.js";
 export function cleanInput(input) {
     const lowerCaseInput = input.toLocaleLowerCase().trim();
     return lowerCaseInput.split(" ");
@@ -15,8 +16,19 @@ export function startREPL() {
             rl.prompt();
         }
         else {
-            let firstWord = cleanInput(input)[0];
-            console.log(`Your command was: ${firstWord}`);
+            const firstWord = cleanInput(input)[0];
+            const registry = getCommands();
+            if (firstWord in registry) {
+                try {
+                    registry[firstWord].callback(registry);
+                }
+                catch (err) {
+                    console.log(err);
+                }
+            }
+            else {
+                throw new Error("Unknown command");
+            }
             rl.prompt();
         }
     });
