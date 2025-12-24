@@ -17,18 +17,19 @@ export function startREPL() {
     rl.on("line", (input) => {
         if (!input.length) {
             rl.prompt();
+            return;
         } else {
-            const firstWord = cleanInput(input)[0];
+            const command = cleanInput(input)[0];
             const registry = getCommands();
 
-            if (firstWord in registry) {
+            if (command in registry) {
                 try {
-                    registry[firstWord].callback(registry);
+                    registry[command].callback(registry);
                 } catch (err) {
                     console.log(err);
                 }
             } else {
-                throw new Error("Unknown command");
+                throw new Error("Unknown command. Type 'help' to display commands.");
             }
             rl.prompt();
         }
