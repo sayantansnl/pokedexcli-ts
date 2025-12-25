@@ -1,6 +1,6 @@
 import { createInterface, Interface } from "readline";
 import { getCommands } from "./cliCommand.js";
-import { PokeAPI } from "./pokeApi.js";
+import { PokeAPI, Pokemon } from "./pokeApi.js";
 import { Cache } from "./pokeCache.js";
 
 export type CLICommand = {
@@ -15,6 +15,7 @@ export type State = {
     pokeapi: PokeAPI;
     next: string;
     previous: string;
+    pokeBall: Record<string, Pokemon>;
 };
 
 export async function initState(): Promise<State> {
@@ -28,6 +29,7 @@ export async function initState(): Promise<State> {
     const pokeAPI = new PokeAPI(new Cache(5000));
     let next = "";
     let previous = "";
+    let pokeBall = {};
 
     return {
         interface: rl,
@@ -35,5 +37,6 @@ export async function initState(): Promise<State> {
         pokeapi: pokeAPI,
         next: next,
         previous: previous,
+        pokeBall: pokeBall,
     };
 }

@@ -12,11 +12,13 @@ export async function initState() {
     const pokeAPI = new PokeAPI(new Cache(5000));
     let next = "";
     let previous = "";
+    let pokeBall = {};
     return {
         interface: rl,
         commands: registry,
         pokeapi: pokeAPI,
         next: next,
         previous: previous,
+        pokeBall: pokeBall,
     };
 }

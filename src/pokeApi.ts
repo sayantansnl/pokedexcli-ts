@@ -1,4 +1,5 @@
 import { Cache } from "./pokeCache.js";
+import { PokeRoot } from "./PokeRoot.js";
 import { Root } from "./root.js";
 
 export class PokeAPI {
@@ -48,6 +49,18 @@ export class PokeAPI {
             throw e; 
         }
     }
+
+    async fetchPokemon(pokemonName: string): Promise<Pokemon> {
+        const fullURL = `${PokeAPI.baseURL}/pokemon/${pokemonName}`;
+        try {
+            const response = await fetch(fullURL);
+            const data = (await response.json()) as Pokemon;
+            return data;
+        } catch (err) {
+            console.error(`Error during fetching pokemon details: ${(err as Error).message}`);
+            throw err;
+        }
+    }
 }
 
 export type ShallowLocations = {
@@ -63,3 +76,4 @@ type Result = {
 };
 
 export type Location = Root;
+export type Pokemon = PokeRoot;

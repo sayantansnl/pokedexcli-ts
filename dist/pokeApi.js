@@ -39,4 +39,16 @@ export class PokeAPI {
             throw e;
         }
     }
+    async fetchPokemon(pokemonName) {
+        const fullURL = `${PokeAPI.baseURL}/pokemon/${pokemonName}`;
+        try {
+            const response = await fetch(fullURL);
+            const data = (await response.json());
+            return data;
+        }
+        catch (err) {
+            console.error(`Error during fetching pokemon details: ${err.message}`);
+            throw err;
+        }
+    }
 }
