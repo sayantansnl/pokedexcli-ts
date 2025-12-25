@@ -2,29 +2,27 @@ export function cleanInput(input) {
     const lowerCaseInput = input.toLocaleLowerCase().trim();
     return lowerCaseInput.split(" ");
 }
-export function startREPL(state) {
+export async function startREPL(state) {
     const rl = state.interface;
     const registry = state.commands;
     rl.prompt();
-    rl.on("line", (input) => {
+    rl.on("line", async (input) => {
         if (!input.length) {
             rl.prompt();
             return;
         }
-        else {
-            const command = cleanInput(input)[0];
-            if (command in registry) {
-                try {
-                    registry[command].callback(state);
-                }
-                catch (err) {
-                    console.log(err);
-                }
+        const command = cleanInput(input)[0];
+        if (command in registry) {
+            try {
+                await registry[command].callback(state);
             }
-            else {
-                throw new Error("Unknown command. Type 'help' to display commands.");
+            catch (err) {
+                console.log(err);
             }
-            rl.prompt();
         }
+        else {
+            throw new Error("Unknown command. Type 'help' to display commands.");
+        }
+        rl.prompt();
     });
 }
