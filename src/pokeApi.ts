@@ -23,29 +23,29 @@ export class PokeAPI {
 
     async fetchLocation(locationName: string): Promise<Location> {
         const fullURL = `${PokeAPI.baseURL}/location-area/${locationName}`;
-        //console.log(`[PokeAPI] Attempting to fetch from URL: ${fullURL}`); // <--- Add this
+        //console.log(`[PokeAPI] Attempting to fetch from URL: ${fullURL}`);
         
         const cached = this.cache.get<Location>(fullURL);
         if (cached) {
-            //console.log(`[PokeAPI] Found cached data for: ${fullURL}`); // <--- And this
+            //console.log(`[PokeAPI] Found cached data for: ${fullURL}`);
             return cached;
         }
 
         try {
             const response = await fetch(fullURL);
-            //console.log(`[PokeAPI] Received response status: ${response.status} ${response.statusText}`); // <--- And this
+            //console.log(`[PokeAPI] Received response status: ${response.status} ${response.statusText}`);
 
             if (!response.ok) {
                 throw new Error(`${response.status} ${response.statusText}`);
             }
 
             const data = (await response.json()) as Location;
-            //console.log(`[PokeAPI] Successfully parsed JSON for: ${fullURL}`); // <--- And this
+            //console.log(`[PokeAPI] Successfully parsed JSON for: ${fullURL}`); //
             this.cache.add(fullURL, data);
             return data;
         } catch (e) {
-            console.error(`[PokeAPI] Error during fetch or JSON parsing for ${fullURL}: ${(e as Error).message}`); // <--- And this
-            throw e; // Re-throw the error so your commandExplore can catch it
+            console.error(`[PokeAPI] Error during fetch or JSON parsing for ${fullURL}: ${(e as Error).message}`);
+            throw e; 
         }
     }
 }
