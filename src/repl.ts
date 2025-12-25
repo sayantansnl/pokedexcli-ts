@@ -16,10 +16,11 @@ export async function startREPL(state: State) {
             return;
         } 
         const command = cleanInput(input)[0];
+        const args = cleanInput(input).slice(1);
 
         if (command in registry) {
             try {
-                await registry[command].callback(state);
+                await registry[command].callback(state, ...args);
             } catch (err) {
                 console.log(err);
             }

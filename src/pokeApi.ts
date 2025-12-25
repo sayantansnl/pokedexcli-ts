@@ -23,15 +23,30 @@ export class PokeAPI {
 
     async fetchLocation(locationName: string): Promise<Location> {
         const fullURL = `${PokeAPI.baseURL}/location-area/${locationName}`;
-
+        //console.log(`[PokeAPI] Attempting to fetch from URL: ${fullURL}`); // <--- Add this
+        
         const cached = this.cache.get<Location>(fullURL);
         if (cached) {
+            //console.log(`[PokeAPI] Found cached data for: ${fullURL}`); // <--- And this
             return cached;
         }
 
-        const response = await fetch(fullURL);
-        const data = (await response.json()) as Location;
-        return data;
+        try {
+            const response = await fetch(fullURL);
+            //console.log(`[PokeAPI] Received response status: ${response.status} ${response.statusText}`); // <--- And this
+
+            if (!response.ok) {
+                throw new Error(`${response.status} ${response.statusText}`);
+            }
+
+            const data = (await response.json()) as Location;
+            //console.log(`[PokeAPI] Successfully parsed JSON for: ${fullURL}`); // <--- And this
+            this.cache.add(fullURL, data);
+            return data;
+        } catch (e) {
+            console.error(`[PokeAPI] Error during fetch or JSON parsing for ${fullURL}: ${(e as Error).message}`); // <--- And this
+            throw e; // Re-throw the error so your commandExplore can catch it
+        }
     }
 }
 
@@ -47,6 +62,4 @@ type Result = {
     url: string;
 };
 
-export type Location = {
-    root: Root
-};
+export type Location = Root;

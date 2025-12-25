@@ -1,4 +1,5 @@
 import { commandExit } from "./command_exit.js";
+import { commandExplore } from "./command_explore.js";
 import { commandHelp } from "./command_help.js";
 import { commandMap } from "./command_map.js";
 import { commandMapb } from "./command_mapb.js";
@@ -23,6 +24,11 @@ export function getCommands() {
             name: "mapb",
             description: "Displays previous 20 locations at a time",
             callback: commandMapb,
+        },
+        explore: {
+            name: "explore",
+            description: "Displays the pokemons available in the specified area",
+            callback: commandExplore,
         }
     };
 }
