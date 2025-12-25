@@ -1,6 +1,7 @@
 import { createInterface } from "readline";
 import { getCommands } from "./cliCommand.js";
 import { PokeAPI } from "./pokeApi.js";
+import { Cache } from "./pokeCache.js";
 export async function initState() {
     const rl = createInterface({
         input: process.stdin,
@@ -8,7 +9,7 @@ export async function initState() {
         prompt: "Pokedex > "
     });
     const registry = getCommands();
-    const pokeAPI = new PokeAPI();
+    const pokeAPI = new PokeAPI(new Cache(5000));
     let next = "";
     let previous = "";
     return {

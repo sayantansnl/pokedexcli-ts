@@ -1,6 +1,7 @@
 import { createInterface, Interface } from "readline";
 import { getCommands } from "./cliCommand.js";
 import { PokeAPI } from "./pokeApi.js";
+import { Cache } from "./pokeCache.js";
 
 export type CLICommand = {
     name: string;
@@ -24,7 +25,7 @@ export async function initState(): Promise<State> {
     });
 
     const registry = getCommands();
-    const pokeAPI = new PokeAPI();
+    const pokeAPI = new PokeAPI(new Cache(5000));
     let next = "";
     let previous = "";
 
